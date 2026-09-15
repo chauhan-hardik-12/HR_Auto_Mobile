@@ -1,0 +1,11 @@
+# Prevent directory listings
+Options -Indexes
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Protect sensitive files
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|env|sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
