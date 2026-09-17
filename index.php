@@ -37,7 +37,7 @@ try {
     <!-- Dynamic Hero section -->
     <section class="home">
         <div class="home-content">
-            <img src="assets/images/background.jpg" alt="Background Image" class="bg-image">
+            <img src="assets/images/background.png" alt="Background Image" class="bg-image">
         </div>
         <div class="bar">
             <div>
@@ -319,4 +319,4 @@ try {
     <script src="assets/js/book.js"></script>
 </body>
 
-</html>
+</html>s
