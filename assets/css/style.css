@@ -408,21 +408,43 @@ header {
 /* Partner with us Content  */
 .partners-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, auto));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.5rem;
+    align-items: stretch;
+}
+
+.partner-box {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    /* background: var(--container-color); */
+    border-radius: 12px;
+    overflow: hidden;
+    /* box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08); */
 }
 
 .partner-box img {
+    display: block;
     width: 100%;
-    height: 400px;
-    object-fit: cover;
-    border-radius: 10px;
+    height: auto;
+    aspect-ratio: auto;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 12px 12px 0 0;
 }
 
 .partner-box h2 {
     font-size: 1.5rem;
     font-weight: 400;
     margin-top: 5px;
+    margin: 12px 12px 4px;
+}
+
+.partner-box span {
+    display: block;
+    color: var(--text-alter-color);
+    font-size: 1rem;
+    margin: 0 12px 16px;
 }
 
 /* Call to action section */
@@ -2106,7 +2128,7 @@ textarea:focus-visible {
     }
 
     .partner-box img {
-        height: 320px;
+        height: auto;
     }
 
     .call-to-action {
@@ -2253,7 +2275,7 @@ textarea:focus-visible {
     }
 
     .partner-box img {
-        height: 260px;
+        height: auto;
     }
 
     .call-to-action {
