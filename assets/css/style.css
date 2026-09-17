@@ -791,11 +791,12 @@ header {
 
 /* Choose Vehicle Section */
 .container-booking {
-    margin: 2rem; 
+    width: min(1100px, calc(100% - 32px));
+    margin: 2rem auto;
 }
 
 .choose-service {
-    margin: 2rem;
+    max-width: 1100px;
 }
 
 .choose-service h2 {
@@ -1072,6 +1073,7 @@ header {
 
 .form-group select {
     flex: 1;
+    min-width: 0;
     padding: 14px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -1937,8 +1939,57 @@ textarea:focus-visible {
 
 /* Vehicle cards */
 .vehicle-types {
-    width: min(700px, 100%);
-    padding-inline: 16px;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.vehicle-card {
+    width: 280px;
+    min-height: 180px;
+    padding: 30px 20px;
+    background: #ffffff;
+    border: 2px solid #e5e5e5;
+    border-radius: 15px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.25s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.vehicle-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--hover-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10);
+}
+
+.vehicle-card.active {
+    border-color: var(--main-color);
+    background: #fff5f5;
+}
+
+.vehicle-card.loading {
+    cursor: default;
+    color: #999;
+    font-weight: 300;
+}
+
+.vehicle-card i {
+    display: flex;
+    justify-content: center;
+    font-size: 65px;
+    color: var(--main-color);
+    margin-bottom: 10px;
+}
+
+.vehicle-card h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+    font-weight: 300;
 }
 
 .vehicle-card {
@@ -2087,9 +2138,11 @@ textarea:focus-visible {
         padding: 14px 16px;
         gap: 14px;
     }
-    .menu-icon{
+
+    .menu-icon {
         display: flex;
     }
+
     .logo {
         font-size: 23px;
         white-space: nowrap;
