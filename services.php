@@ -22,8 +22,8 @@ $isLoggedIn = !empty($_SESSION['is_authenticated']) && !empty($_SESSION['user_id
         <h1>Professional Car &amp; Bike Services</h1>
         <p>Browse our verified vehicle service packages and book directly online.</p>
     </section>
-<!-- container-booking -->
-    <section class="choose-service">
+    <!-- container-booking -->
+    <section class="choose-service container-booking">
         <h2>Choose Your Vehicle</h2>
         <div class="vehicle-types" id="vehicleTypes">
             <div class="vehicle-card loading">Loading vehicle types...</div>
