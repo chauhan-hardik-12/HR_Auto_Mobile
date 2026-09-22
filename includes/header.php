@@ -14,9 +14,10 @@ require_once __DIR__ . '/settings_loader.php';
             <a href="/Hr_Auto_Mobile/dashboard.php" title="Customer Dashboard"><i class='bx bx-user'></i></a>
         </div>
     </div>
-    <!-- <div class="menu-icon">
+    <div class="menu-icon">
         <div class="line1"></div>
         <div class="line2"></div>
         <div class="line3"></div>
-    </div> -->
+    </div>
 </header>
+<script src="assets/js/script.js"></script>

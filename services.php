@@ -97,7 +97,7 @@ $isLoggedIn = !empty($_SESSION['is_authenticated']) && !empty($_SESSION['user_id
             </form>
         </div>
     </div>
-
+    <?php include("includes/footer.php"); ?>
     <!-- Pass Authentication state from PHP to JavaScript -->
     <script>
         window.IS_LOGGED_IN = <?= json_encode($isLoggedIn) ?>;

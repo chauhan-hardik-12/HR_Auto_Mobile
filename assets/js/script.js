@@ -1,7 +1,7 @@
 // Menu
 
 let menu = document.querySelector(".menu-icon");
-let navbar = document.querySelector(".navbar");
+let navbar = document.querySelector(".menu");
 
 menu.onclick = () => {
     menu.classList.toggle("move");
@@ -30,7 +30,7 @@ const animate = ScrollReveal({
     delay:'400',
 })
 
-animate.reveal(".nav,.heading");
+animate.reveal(".menu,.heading");
 animate.reveal(".home-img img",{origin:'right'});
 animate.reveal(".input-form",{origin:'bottom'});
 animate.reveal(".trend-box, .rental-box, .team-box, .t-box, .newslatter",{interval:100});
