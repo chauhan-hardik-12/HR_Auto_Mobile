@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message = "Password must be at least 8 characters long.";
     } elseif ($password !== $confirm_password) {
         $message = "Passwords do not match.";
+    } else {
         try {
             $stmt = $pdo->prepare("SELECT id FROM users WHERE phone = :phone OR email = :email LIMIT 1");
             $stmt->execute(['phone' => $phone, 'email' => $email]);
@@ -52,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 exit;
             }
         } catch (PDOException $e) {
+            error_log('register.php database error: ' . $e->getMessage());
             $message = "Registration failed. Please try again.";
         }
     }

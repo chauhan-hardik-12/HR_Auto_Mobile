@@ -34,7 +34,7 @@ try {
         $admin = $adminStmt->fetch();
 
         if ($admin && password_verify($password, $admin['password'])) {
-            if ((int)$admin['status'] !== 1) {
+            if ((int) $admin['status'] !== 1) {
                 echo json_encode(["success" => false, "message" => "Your admin account is inactive."]);
                 exit;
             }
@@ -76,8 +76,23 @@ try {
         $email = trim($input['email'] ?? '');
         $password = $input['password'] ?? '';
 
-        if (empty($name) || empty($phone) || empty($password)) {
-            echo json_encode(["success" => false, "message" => "Name, phone, and password are required."]);
+        if (empty($name) || empty($phone) || empty($email) || empty($password)) {
+            echo json_encode(["success" => false, "message" => "Name, email, phone, and password are required."]);
+            exit;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(["success" => false, "message" => "Please provide a valid email address."]);
+            exit;
+        }
+
+        if (!preg_match('/^[0-9]{10}$/', $phone)) {
+            echo json_encode(["success" => false, "message" => "Phone number must be exactly 10 digits."]);
+            exit;
+        }
+
+        if (strlen($password) < 8) {
+            echo json_encode(["success" => false, "message" => "Password must be at least 8 characters long."]);
             exit;
         }
 
