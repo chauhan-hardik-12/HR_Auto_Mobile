@@ -8,6 +8,7 @@ try {
     $pStmt = $pdo->query("SELECT name, role, image FROM partners WHERE status = 1 ORDER BY display_order ASC, id ASC");
     $partners = $pStmt->fetchAll();
 } catch (Exception $e) {
+    error_log('index.php testimonials load error: ' . $e->getMessage());
 }
 
 // Fetch Dynamic Testimonials (from DB)
@@ -319,4 +320,4 @@ try {
     <script src="assets/js/book.js"></script>
 </body>
 
-</html>s
+</html>

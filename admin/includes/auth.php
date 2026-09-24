@@ -9,9 +9,9 @@ header("Expires: Thu, 01 Jan 1970 00:00:00 GMT");
 
 // 2. Check if admin is authenticated
 if (empty($_SESSION['admin_logged_in']) || empty($_SESSION['admin_id'])) {
-    $currentUri = $_SERVER['REQUEST_URI'] ?? '/Hr_Auto_Mobile/admin/index.php';
+    $currentUri = $_SERVER['REQUEST_URI'] ?? '/admin/index.php';
     $_SESSION['admin_redirect_after_login'] = $currentUri;
-    header("Location: /Hr_Auto_Mobile/login.php");
+    header("Location: ../login.php");
     exit;
 }
 

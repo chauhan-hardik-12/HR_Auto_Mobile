@@ -18,7 +18,7 @@ header("Expires: Thu, 01 Jan 1970 00:00:00 GMT");
 
 // 2. Verify login status
 if (empty($_SESSION['is_authenticated']) || empty($_SESSION['user_id'])) {
-    $currentUri = $_SERVER['REQUEST_URI'] ?? '/Hr_Auto_Mobile/dashboard.php';
+    $currentUri = $_SERVER['REQUEST_URI'] ?? '/dashboard.php';
     $path = parse_url($currentUri, PHP_URL_PATH);
     $targetFile = basename($path);
 
@@ -26,6 +26,6 @@ if (empty($_SESSION['is_authenticated']) || empty($_SESSION['user_id'])) {
         $_SESSION['redirect_after_login'] = $currentUri;
     }
 
-    header("Location: /Hr_Auto_Mobile/login.php");
+    header("Location: login.php");
     exit;
 }
