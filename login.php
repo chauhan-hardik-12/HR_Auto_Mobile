@@ -273,7 +273,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <form method="POST" action="login.php">
             <div class="form-group">
-                <label for="identifier">Mobile Number, Email or Username</label>
+                <label for="identifier">Mobile Number, Email</label>
                 <input type="text" id="identifier" name="identifier" placeholder="Enter your credentials" required autofocus autocomplete="username">
             </div>
 

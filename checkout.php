@@ -3,9 +3,9 @@ require_once "includes/auth.php";
 require_once "assets/config/db.php";
 
 $userId = (int) $_SESSION['user_id'];
-$modelId = filter_input(INPUT_GET, 'model_id', FILTER_VALIDATE_INT);
-$serviceId = filter_input(INPUT_GET, 'service_id', FILTER_VALIDATE_INT);
-$amount = filter_input(INPUT_GET, 'amount', FILTER_VALIDATE_FLOAT);
+$modelId = filter_var($_GET['model_id'] ?? null, FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'model_id', FILTER_VALIDATE_INT);
+$serviceId = filter_var($_GET['service_id'] ?? null, FILTER_VALIDATE_INT) ?: filter_input(INPUT_GET, 'service_id', FILTER_VALIDATE_INT);
+$amount = filter_var($_GET['amount'] ?? null, FILTER_VALIDATE_FLOAT) ?: filter_input(INPUT_GET, 'amount', FILTER_VALIDATE_FLOAT);
 
 if (!$modelId || !$serviceId) {
     header("Location: services.php");

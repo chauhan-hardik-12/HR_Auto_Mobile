@@ -197,7 +197,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 
 <body>
-
     <div class="auth-container">
         <div class="auth-card">
             <h3 class="title">HR Auto Mobile</h3>

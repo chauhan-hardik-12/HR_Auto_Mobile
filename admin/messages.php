@@ -74,15 +74,21 @@ require_once __DIR__ . '/includes/sidebar.php';
             <div class="card card-outline card-primary shadow-sm mb-3">
                 <div class="card-body py-2">
                     <div class="d-flex align-items-center">
-                        <span class="mr-3 text-muted font-weight-bold"><i class="fas fa-filter mr-1"></i> Filter Status:</span>
-                        <a href="messages.php" class="btn btn-sm <?= ($filterStatus === 'all') ? 'btn-primary font-weight-bold' : 'btn-outline-secondary' ?> mr-2">All Messages</a>
-                        <a href="messages.php?status=unread" class="btn btn-sm <?= ($filterStatus === 'unread') ? 'btn-danger font-weight-bold' : 'btn-outline-danger' ?> mr-2">
+                        <span class="mr-3 text-muted font-weight-bold"><i class="fas fa-filter mr-1"></i> Filter
+                            Status:</span>
+                        <a href="messages.php"
+                            class="btn btn-sm <?= ($filterStatus === 'all') ? 'btn-primary font-weight-bold' : 'btn-outline-secondary' ?> mr-2">All
+                            Messages</a>
+                        <a href="messages.php?status=unread"
+                            class="btn btn-sm <?= ($filterStatus === 'unread') ? 'btn-danger font-weight-bold' : 'btn-outline-danger' ?> mr-2">
                             <i class="fas fa-envelope mr-1"></i> Unread
                         </a>
-                        <a href="messages.php?status=read" class="btn btn-sm <?= ($filterStatus === 'read') ? 'btn-info font-weight-bold' : 'btn-outline-info' ?> mr-2">
+                        <a href="messages.php?status=read"
+                            class="btn btn-sm <?= ($filterStatus === 'read') ? 'btn-info font-weight-bold' : 'btn-outline-info' ?> mr-2">
                             <i class="fas fa-envelope-open mr-1"></i> Read
                         </a>
-                        <a href="messages.php?status=replied" class="btn btn-sm <?= ($filterStatus === 'replied') ? 'btn-success font-weight-bold' : 'btn-outline-success' ?>">
+                        <a href="messages.php?status=replied"
+                            class="btn btn-sm <?= ($filterStatus === 'replied') ? 'btn-success font-weight-bold' : 'btn-outline-success' ?>">
                             <i class="fas fa-reply mr-1"></i> Replied
                         </a>
                     </div>
@@ -92,7 +98,8 @@ require_once __DIR__ . '/includes/sidebar.php';
             <!-- Messages DataTable -->
             <div class="card shadow-sm">
                 <div class="card-header bg-light">
-                    <h3 class="card-title font-weight-bold"><i class="fas fa-inbox mr-1"></i> Customer Messages Inbox</h3>
+                    <h3 class="card-title font-weight-bold"><i class="fas fa-inbox mr-1"></i> Customer Messages Inbox
+                    </h3>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped table-hover datatable-buttons">
@@ -108,15 +115,19 @@ require_once __DIR__ . '/includes/sidebar.php';
                         </thead>
                         <tbody>
                             <?php foreach ($messages as $m): ?>
-                                <tr class="<?= (($m['status'] ?? 'unread') === 'unread') ? 'font-weight-bold table-warning' : '' ?>">
+                                <tr
+                                    class="<?= (($m['status'] ?? 'unread') === 'unread') ? 'font-weight-bold table-warning' : '' ?>">
                                     <td><strong>#<?= $m['id'] ?></strong></td>
                                     <td>
                                         <strong><?= htmlspecialchars($m['name']) ?></strong><br>
-                                        <small class="text-muted"><i class="fas fa-phone mr-1"></i><?= htmlspecialchars($m['phone']) ?></small><br>
-                                        <small class="text-muted"><i class="fas fa-envelope mr-1"></i><?= htmlspecialchars($m['email']) ?></small>
+                                        <small class="text-muted"><i
+                                                class="fas fa-phone mr-1"></i><?= htmlspecialchars($m['phone']) ?></small><br>
+                                        <small class="text-muted"><i
+                                                class="fas fa-envelope mr-1"></i><?= htmlspecialchars($m['email']) ?></small>
                                     </td>
                                     <td>
-                                        <p class="mb-0 text-dark"><?= htmlspecialchars(mb_strimwidth($m['message'], 0, 100, "...")) ?></p>
+                                        <p class="mb-0 text-dark">
+                                            <?= htmlspecialchars(mb_strimwidth($m['message'], 0, 100, "...")) ?></p>
                                     </td>
                                     <td>
                                         <small><?= date('d M Y, h:i A', strtotime($m['created_at'])) ?></small>
@@ -125,7 +136,9 @@ require_once __DIR__ . '/includes/sidebar.php';
                                         <form method="POST" style="display:inline-block;">
                                             <input type="hidden" name="action" value="update_status">
                                             <input type="hidden" name="id" value="<?= $m['id'] ?>">
-                                            <select name="status" class="form-control form-control-sm border-0 font-weight-bold <?= (($m['status'] ?? 'unread') === 'unread') ? 'badge badge-danger' : ((($m['status'] ?? '') === 'replied') ? 'badge badge-success' : 'badge badge-secondary') ?>" onchange="this.form.submit()">
+                                            <select name="status"
+                                                class="form-control form-control-sm border-0 font-weight-bold <?= (($m['status'] ?? 'unread') === 'unread') ? 'badge badge-danger' : ((($m['status'] ?? '') === 'replied') ? 'badge badge-success' : 'badge badge-secondary') ?>"
+                                                onchange="this.form.submit()">
                                                 <option value="unread" <?= (($m['status'] ?? 'unread') === 'unread') ? 'selected' : '' ?>>Unread</option>
                                                 <option value="read" <?= (($m['status'] ?? '') === 'read') ? 'selected' : '' ?>>Read</option>
                                                 <option value="replied" <?= (($m['status'] ?? '') === 'replied') ? 'selected' : '' ?>>Replied</option>
@@ -133,13 +146,16 @@ require_once __DIR__ . '/includes/sidebar.php';
                                         </form>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-xs btn-primary" onclick='viewMessage(<?= json_encode($m) ?>)' title="View Full Message">
+                                        <button type="button" class="btn btn-xs btn-primary"
+                                            onclick='viewMessage(<?= json_encode($m) ?>)' title="View Full Message">
                                             <i class="fas fa-eye"></i> View
                                         </button>
-                                        <a href="mailto:<?= htmlspecialchars($m['email']) ?>?subject=Regarding your inquiry at HR Auto Mobile" class="btn btn-xs btn-success" title="Reply via Email">
+                                        <a href="mailto:<?= htmlspecialchars($m['email']) ?>?subject=Regarding your inquiry at HR Auto Mobile"
+                                            class="btn btn-xs btn-success" title="Reply via Email">
                                             <i class="fas fa-reply"></i>
                                         </a>
-                                        <form method="POST" style="display:inline-block;" onsubmit="return confirmAction(event, 'Are you sure you want to delete message from \'<?= htmlspecialchars($m['name']) ?>\'?')">
+                                        <form method="POST" style="display:inline-block;"
+                                            onsubmit="return confirmAction(event, 'Are you sure you want to delete message from \'<?= htmlspecialchars($m['name']) ?>\'?')">
                                             <input type="hidden" name="action" value="delete">
                                             <input type="hidden" name="id" value="<?= $m['id'] ?>">
                                             <button type="submit" class="btn btn-xs btn-danger" title="Delete Message">
@@ -174,10 +190,12 @@ require_once __DIR__ . '/includes/sidebar.php';
                     <input type="hidden" name="action" value="update_status">
                     <input type="hidden" name="id" id="modal_msg_id">
                     <input type="hidden" name="status" value="read">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="fas fa-check mr-1"></i> Mark as Read</button>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm"><i class="fas fa-check mr-1"></i>
+                        Mark as Read</button>
                 </form>
                 <div>
-                    <a href="#" id="modalReplyBtn" class="btn btn-success btn-sm"><i class="fas fa-reply mr-1"></i> Reply via Email</a>
+                    <a href="#" id="modalReplyBtn" class="btn btn-success btn-sm"><i class="fas fa-reply mr-1"></i>
+                        Reply via Email</a>
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -188,12 +206,12 @@ require_once __DIR__ . '/includes/sidebar.php';
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
 
 <script>
-function viewMessage(m) {
-    $('#msgModalTitle').text('Message from ' + m.name);
-    $('#modal_msg_id').val(m.id);
-    $('#modalReplyBtn').attr('href', 'mailto:' + m.email + '?subject=Re: Inquiry at HR Auto Mobile');
+    function viewMessage(m) {
+        $('#msgModalTitle').text('Message from ' + m.name);
+        $('#modal_msg_id').val(m.id);
+        $('#modalReplyBtn').attr('href', 'mailto:' + m.email + '?subject=Re: Inquiry at HR Auto Mobile');
 
-    var html = `
+        var html = `
         <div class="mb-3">
             <p class="mb-1"><strong>Sender:</strong> ${m.name}</p>
             <p class="mb-1"><strong>Email:</strong> <a href="mailto:${m.email}">${m.email}</a></p>
@@ -203,7 +221,7 @@ function viewMessage(m) {
         <hr>
         <div class="alert alert-light border p-3" style="white-space: pre-wrap; font-size: 15px; line-height: 1.6;">${m.message}</div>
     `;
-    $('#msgModalBody').html(html);
-    $('#viewMessageModal').modal('show');
-}
+        $('#msgModalBody').html(html);
+        $('#viewMessageModal').modal('show');
+    }
 </script>

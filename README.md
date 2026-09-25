@@ -17,6 +17,8 @@ HR Auto Mobile is a PHP/MySQL vehicle service booking platform for cars and bike
 - [Administration](#administration)
 - [Security and operational notes](#security-and-operational-notes)
 - [Troubleshooting](#troubleshooting)
+- [Testing & QA Report](#testing--qa-report)
+- [Manual verification checklist](#manual-verification-checklist)
 
 ## Features
 
@@ -169,6 +171,9 @@ These values can be managed from `admin/settings.php`.
 ├── login.php                 # Customer/admin login UI
 ├── register.php              # Customer registration UI
 ├── logout.php                # Customer logout
+├── TESTING.md                # Comprehensive QA testing documentation & report
+├── tests/
+│   └── run_tests.php         # Automated CLI/web test suite runner
 ├── assets/
 │   ├── api/                  # JSON authentication and catalog endpoints
 │   ├── config/db.php         # PDO database connection
@@ -347,6 +352,30 @@ Confirm that the admin account has `status = 1`, the password is a PHP password 
 ### A booking does not appear in the dashboard
 
 Confirm that the booking was inserted with the authenticated customer’s `user_id` and that the database query can join the referenced model, brand, vehicle type, and service records.
+
+## Testing & QA Report
+
+HR Auto Mobile includes a comprehensive automated test suite and QA testing report covering database schema, data integrity, catalog APIs, authentication rules, route guards, security checks, and end-to-end booking simulation.
+
+For detailed test specifications, test matrix, and audit results, see [TESTING.md](TESTING.md).
+
+### Running the Automated Test Suite
+
+**Via Command Line (CLI):**
+
+```bash
+"C:\xampp\php\php.exe" tests/run_tests.php
+```
+
+**Via Web Browser:**
+
+With Apache running in XAMPP, navigate to:
+
+```text
+http://localhost/HR_Auto_Mobile/tests/run_tests.php
+```
+
+The test runner will execute all 72 test cases in real time and render a color-coded status report.
 
 ## Manual verification checklist
 

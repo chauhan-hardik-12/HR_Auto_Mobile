@@ -2,28 +2,28 @@
 define('PAGE_TITLE', 'Partners - HR Auto Mobile Admin');
 require_once __DIR__ . '/includes/auth.php';
 
-// Handle POST actions
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $action = $_POST['action'] ?? '';
+    // Handle POST actions
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $action = $_POST['action'] ?? '';
 
-    // Add Partner
-    if ($action === 'add') {
-        $name = trim($_POST['name'] ?? '');
-        $role = trim($_POST['role'] ?? '');
-        $image = trim($_POST['image'] ?? 'assets/images/partner-1.jpg');
-        $displayOrder = (int) ($_POST['display_order'] ?? 0);
-        $status = isset($_POST['status']) ? 1 : 0;
+        // Add Partner
+        if ($action === 'add') {
+            $name = trim($_POST['name'] ?? '');
+            $role = trim($_POST['role'] ?? '');
+            $image = trim($_POST['image'] ?? 'assets/images/partner-1.jpg');
+            $displayOrder = (int) ($_POST['display_order'] ?? 0);
+            $status = isset($_POST['status']) ? 1 : 0;
 
-        if (!empty($name) && !empty($role)) {
-            $stmt = $pdo->prepare("INSERT INTO partners (name, role, image, display_order, status, created_at) VALUES (:n, :r, :img, :o, :s, NOW())");
-            $stmt->execute(['n' => $name, 'r' => $role, 'img' => $image, 'o' => $displayOrder, 's' => $status]);
-            setFlashMessage('success', "Partner profile for '{$name}' created successfully.");
-        } else {
-            setFlashMessage('error', "Name and role are required.");
+            if (!empty($name) && !empty($role)) {
+                $stmt = $pdo->prepare("INSERT INTO partners (name, role, image, display_order, status, created_at) VALUES (:n, :r, :img, :o, :s, NOW())");
+                $stmt->execute(['n' => $name, 'r' => $role, 'img' => $image, 'o' => $displayOrder, 's' => $status]);
+                setFlashMessage('success', "Partner profile for '{$name}' created successfully.");
+            } else {
+                setFlashMessage('error', "Name and role are required.");
+            }
+            header("Location: partners.php");
+            exit;
         }
-        header("Location: partners.php");
-        exit;
-    }
 
     // Edit Partner
     if ($action === 'edit') {
