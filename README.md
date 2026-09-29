@@ -18,6 +18,7 @@ HR Auto Mobile is a PHP/MySQL vehicle service booking platform for cars and bike
 - [Security and operational notes](#security-and-operational-notes)
 - [Troubleshooting](#troubleshooting)
 - [Testing & QA Report](#testing--qa-report)
+- [Project Documentation](#project-documentation)
 - [Manual verification checklist](#manual-verification-checklist)
 
 ## Features
@@ -84,7 +85,7 @@ The current implementation records the booking and payment status; it does not i
 - MySQL or MariaDB
 - A modern browser with JavaScript enabled
 
-No Composer manifest, Node package manifest, or database dump is included in this repository. The application expects an existing MySQL database whose tables match the queries described in [Database model](#database-model).
+The repository includes a ready-to-import database dump under `database/schema.sql` containing all 12 tables, schema constraints, admin account, vehicle types, brands, models, and service pricing.
 
 ## Local setup with XAMPP
 
@@ -95,15 +96,14 @@ No Composer manifest, Node package manifest, or database dump is included in thi
    C:\xampp\htdocs\HR_Auto_Mobile
    ```
 
-3. Create a MySQL database named `auto-mobile`.
-4. Create and seed the tables listed in [Database model](#database-model). Add at least:
-   - one active vehicle type;
-   - one active brand belonging to that vehicle type;
-   - one active model belonging to that brand;
-   - one active service;
-   - one active `model_services` row with a price;
-   - one active admin account with a password generated using PHP `password_hash()`.
-5. Confirm the connection values in `assets/config/db.php`:
+3. Import the complete database schema and seed data using MySQL CLI or phpMyAdmin:
+
+   ```powershell
+   C:\xampp\mysql\bin\mysql.exe -u root -e "CREATE DATABASE IF NOT EXISTS \`auto-mobile\`;"
+   C:\xampp\mysql\bin\mysql.exe -u root auto-mobile < "database\schema.sql"
+   ```
+
+4. Confirm the connection values in `assets/config/db.php`:
 
    ```php
    $host = "localhost";
@@ -364,7 +364,11 @@ For detailed test specifications, test matrix, and audit results, see [TESTING.m
 **Via Command Line (CLI):**
 
 ```bash
+# 1. Main automated test suite (77 tests: unit, APIs, security, E2E)
 "C:\xampp\php\php.exe" tests/run_tests.php
+
+# 2. Deep functional audit (isolated execution of all 23 views)
+"C:\xampp\php\php.exe" tests/verify_functional.php
 ```
 
 **Via Web Browser:**
@@ -375,7 +379,19 @@ With Apache running in XAMPP, navigate to:
 http://localhost/HR_Auto_Mobile/tests/run_tests.php
 ```
 
-The test runner will execute all 72 test cases in real time and render a color-coded status report.
+The test runner will execute all 77 test cases in real time and render a color-coded status report.
+
+## Project Documentation
+
+Comprehensive technical documentation is organized in the `docs/` directory:
+
+| Document | Purpose |
+| :--- | :--- |
+| [database/schema.sql](database/schema.sql) | Complete MariaDB/MySQL database schema dump with initial catalog & seed data |
+| [docs/API_DOCUMENTATION.md](docs/API_DOCUMENTATION.md) | Exhaustive REST/JSON API endpoint specifications, parameters, responses & curl samples |
+| [docs/DATABASE_DICTIONARY.md](docs/DATABASE_DICTIONARY.md) | Entity-Relationship diagram, field constraints, primary/foreign keys & table data dictionary |
+| [docs/INSTALLATION_GUIDE.md](docs/INSTALLATION_GUIDE.md) | Step-by-step setup guide for Windows (XAMPP) and Linux (Ubuntu LAMP) with security checklist |
+| [TESTING.md](TESTING.md) | Quality Assurance test plan, execution logs, test case matrix (77 tests) & security audit |
 
 ## Manual verification checklist
 

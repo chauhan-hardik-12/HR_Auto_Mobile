@@ -7,7 +7,8 @@ $isServicesActive = in_array($currentPage, ['services.php', 'model_pricing.php']
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index.php" class="brand-link">
-        <img src="dist/img/AdminLTELogo.png" alt="HR Auto Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="dist/img/AdminLTELogo.png" alt="HR Auto Logo" class="brand-image img-circle elevation-3"
+            style="opacity: .8">
         <span class="brand-text font-weight-bold">HR Auto Mobile</span>
     </a>
 
@@ -20,14 +21,16 @@ $isServicesActive = in_array($currentPage, ['services.php', 'model_pricing.php']
             </div>
             <div class="info">
                 <a href="profile.php" class="d-block"><?= htmlspecialchars($currentAdmin['name']) ?></a>
-                <small class="text-muted"><i class="fas fa-circle text-success" style="font-size: 8px;"></i> <?= ucfirst($currentAdmin['role']) ?></small>
+                <small class="text-muted"><i class="fas fa-circle text-success" style="font-size: 8px;"></i>
+                    <?= ucfirst($currentAdmin['role']) ?></small>
             </div>
         </div>
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
-                
+            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu"
+                data-accordion="false">
+
                 <li class="nav-item">
                     <a href="index.php" class="nav-link <?= ($currentPage === 'index.php') ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -58,19 +61,22 @@ $isServicesActive = in_array($currentPage, ['services.php', 'model_pricing.php']
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="vehicle_types.php" class="nav-link <?= ($currentPage === 'vehicle_types.php') ? 'active' : '' ?>">
+                            <a href="vehicle_types.php"
+                                class="nav-link <?= ($currentPage === 'vehicle_types.php') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Vehicle Types</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="brands.php" class="nav-link <?= ($currentPage === 'brands.php') ? 'active' : '' ?>">
+                            <a href="brands.php"
+                                class="nav-link <?= ($currentPage === 'brands.php') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Brands</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="models.php" class="nav-link <?= ($currentPage === 'models.php') ? 'active' : '' ?>">
+                            <a href="models.php"
+                                class="nav-link <?= ($currentPage === 'models.php') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Vehicle Models</p>
                             </a>
@@ -89,13 +95,15 @@ $isServicesActive = in_array($currentPage, ['services.php', 'model_pricing.php']
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="services.php" class="nav-link <?= ($currentPage === 'services.php') ? 'active' : '' ?>">
+                            <a href="services.php"
+                                class="nav-link <?= ($currentPage === 'services.php') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Service Packages</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="model_pricing.php" class="nav-link <?= ($currentPage === 'model_pricing.php') ? 'active' : '' ?>">
+                            <a href="model_pricing.php"
+                                class="nav-link <?= ($currentPage === 'model_pricing.php') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Model Pricing</p>
                             </a>
@@ -138,22 +146,16 @@ $isServicesActive = in_array($currentPage, ['services.php', 'model_pricing.php']
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="testimonials.php" class="nav-link <?= ($currentPage === 'testimonials.php') ? 'active' : '' ?>">
-                        <i class="nav-icon fas fa-star"></i>
-                        <p>Testimonials</p>
-                    </a>
-                </li>
 
                 <li class="nav-header">SYSTEM</li>
 
                 <?php if (($currentAdmin['role'] ?? '') === 'superadmin'): ?>
-                <li class="nav-item">
-                    <a href="admins.php" class="nav-link <?= ($currentPage === 'admins.php') ? 'active' : '' ?>">
-                        <i class="nav-icon fas fa-user-shield"></i>
-                        <p>Admin Accounts</p>
-                    </a>
-                </li>
+                    <li class="nav-item">
+                        <a href="admins.php" class="nav-link <?= ($currentPage === 'admins.php') ? 'active' : '' ?>">
+                            <i class="nav-icon fas fa-user-shield"></i>
+                            <p>Admin Accounts</p>
+                        </a>
+                    </li>
                 <?php endif; ?>
 
                 <li class="nav-item">

@@ -2,6 +2,41 @@
 define('PAGE_TITLE', 'Partners - HR Auto Mobile Admin');
 require_once __DIR__ . '/includes/auth.php';
 
+    // Helper function for uploading partner image
+    function handlePartnerImageUpload($fileInputKey) {
+        if (!isset($_FILES[$fileInputKey]) || $_FILES[$fileInputKey]['error'] !== UPLOAD_ERR_OK) {
+            return false;
+        }
+        $file = $_FILES[$fileInputKey];
+        $allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'];
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+        if (!in_array($ext, $allowedExts)) {
+            setFlashMessage('error', 'Invalid file format. Allowed: JPG, PNG, WEBP, GIF, SVG.');
+            return false;
+        }
+
+        if ($file['size'] > 5 * 1024 * 1024) {
+            setFlashMessage('error', 'Image size exceeds maximum limit of 5MB.');
+            return false;
+        }
+
+        $uploadDir = realpath(__DIR__ . '/../assets/images') ?: (__DIR__ . '/../assets/images');
+        if (!is_dir($uploadDir)) {
+            @mkdir($uploadDir, 0777, true);
+        }
+
+        $newFileName = 'partner-' . time() . '-' . mt_rand(1000, 9999) . '.' . $ext;
+        $targetPath = rtrim($uploadDir, '/\\') . DIRECTORY_SEPARATOR . $newFileName;
+
+        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+            return 'assets/images/' . $newFileName;
+        } else {
+            setFlashMessage('error', 'Failed to save the uploaded image file.');
+            return false;
+        }
+    }
+
     // Handle POST actions
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $action = $_POST['action'] ?? '';
@@ -10,9 +45,19 @@ require_once __DIR__ . '/includes/auth.php';
         if ($action === 'add') {
             $name = trim($_POST['name'] ?? '');
             $role = trim($_POST['role'] ?? '');
-            $image = trim($_POST['image'] ?? 'assets/images/partner-1.jpg');
             $displayOrder = (int) ($_POST['display_order'] ?? 0);
             $status = isset($_POST['status']) ? 1 : 0;
+
+            // Check if file was uploaded via browse
+            $uploadedPath = handlePartnerImageUpload('image_file');
+            if ($uploadedPath !== false) {
+                $image = $uploadedPath;
+            } else {
+                $image = trim($_POST['image'] ?? 'assets/images/partner-1.jpg');
+                if (empty($image)) {
+                    $image = 'assets/images/partner-1.jpg';
+                }
+            }
 
             if (!empty($name) && !empty($role)) {
                 $stmt = $pdo->prepare("INSERT INTO partners (name, role, image, display_order, status, created_at) VALUES (:n, :r, :img, :o, :s, NOW())");
@@ -25,23 +70,36 @@ require_once __DIR__ . '/includes/auth.php';
             exit;
         }
 
-    // Edit Partner
-    if ($action === 'edit') {
-        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $name = trim($_POST['name'] ?? '');
-        $role = trim($_POST['role'] ?? '');
-        $image = trim($_POST['image'] ?? 'assets/images/partner-1.jpg');
-        $displayOrder = (int) ($_POST['display_order'] ?? 0);
-        $status = isset($_POST['status']) ? 1 : 0;
+        // Edit Partner
+        if ($action === 'edit') {
+            $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+            $name = trim($_POST['name'] ?? '');
+            $role = trim($_POST['role'] ?? '');
+            $displayOrder = (int) ($_POST['display_order'] ?? 0);
+            $status = isset($_POST['status']) ? 1 : 0;
 
-        if ($id && !empty($name) && !empty($role)) {
-            $stmt = $pdo->prepare("UPDATE partners SET name = :n, role = :r, image = :img, display_order = :o, status = :s WHERE id = :id");
-            $stmt->execute(['n' => $name, 'r' => $role, 'img' => $image, 'o' => $displayOrder, 's' => $status, 'id' => $id]);
-            setFlashMessage('success', "Partner profile updated successfully.");
+            // Check if a new file was uploaded via browse
+            $uploadedPath = handlePartnerImageUpload('image_file');
+            if ($uploadedPath !== false) {
+                $image = $uploadedPath;
+            } else {
+                $image = trim($_POST['image'] ?? '');
+                // If path is empty and no new upload, preserve existing database image
+                if (empty($image) && $id) {
+                    $currStmt = $pdo->prepare("SELECT image FROM partners WHERE id = :id");
+                    $currStmt->execute(['id' => $id]);
+                    $image = $currStmt->fetchColumn() ?: 'assets/images/partner-1.jpg';
+                }
+            }
+
+            if ($id && !empty($name) && !empty($role)) {
+                $stmt = $pdo->prepare("UPDATE partners SET name = :n, role = :r, image = :img, display_order = :o, status = :s WHERE id = :id");
+                $stmt->execute(['n' => $name, 'r' => $role, 'img' => $image, 'o' => $displayOrder, 's' => $status, 'id' => $id]);
+                setFlashMessage('success', "Partner profile updated successfully.");
+            }
+            header("Location: partners.php");
+            exit;
         }
-        header("Location: partners.php");
-        exit;
-    }
 
     // Toggle Status
     if ($action === 'toggle_status') {
@@ -155,7 +213,7 @@ require_once __DIR__ . '/includes/sidebar.php';
 <div class="modal fade" id="addPartnerModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="add">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title font-weight-bold"><i class="fas fa-plus mr-1"></i> Add Partner Profile</h5>
@@ -170,10 +228,26 @@ require_once __DIR__ . '/includes/sidebar.php';
                         <label>Role / Title *</label>
                         <input type="text" name="role" class="form-control" placeholder="e.g. Partner of HR Auto Mobile" required>
                     </div>
+                    
+                    <!-- Image Upload / Browse System -->
                     <div class="form-group">
-                        <label>Image Asset Path</label>
-                        <input type="text" name="image" class="form-control" value="assets/images/partner-1.jpg">
+                        <label><i class="fas fa-image mr-1"></i> Partner Photo</label>
+                        <div class="custom-file mb-2">
+                            <input type="file" name="image_file" class="custom-file-input" id="add_p_file" accept="image/*" onchange="previewPartnerImage(this, '#add_img_preview', '#add_p_file_label')">
+                            <label class="custom-file-label text-truncate" id="add_p_file_label" for="add_p_file">Browse image from device...</label>
+                        </div>
+                        <div class="d-flex align-items-center p-2 rounded bg-light border">
+                            <img id="add_img_preview" src="../assets/images/partner-1.jpg" alt="Preview" 
+                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #007bff; margin-right: 12px; flex-shrink: 0;"
+                                 onerror="this.src='dist/img/admin.jpeg'">
+                            <div class="flex-grow-1">
+                                <small class="text-muted font-weight-bold d-block">Or Asset Path:</small>
+                                <input type="text" name="image" id="add_p_image" class="form-control form-control-sm" value="assets/images/partner-1.jpg" placeholder="assets/images/partner-1.jpg" oninput="$('#add_img_preview').attr('src', '../' + this.value)">
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Browse an image (JPG, PNG, WEBP, max 5MB) or keep the default asset path.</small>
                     </div>
+
                     <div class="form-group">
                         <label>Display Order</label>
                         <input type="number" name="display_order" class="form-control" value="1">
@@ -196,7 +270,7 @@ require_once __DIR__ . '/includes/sidebar.php';
 <div class="modal fade" id="editPartnerModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="edit">
                 <input type="hidden" name="id" id="edit_p_id">
                 <div class="modal-header bg-warning text-dark">
@@ -212,10 +286,26 @@ require_once __DIR__ . '/includes/sidebar.php';
                         <label>Role / Title *</label>
                         <input type="text" name="role" id="edit_p_role" class="form-control" required>
                     </div>
+
+                    <!-- Image Upload / Browse System -->
                     <div class="form-group">
-                        <label>Image Asset Path</label>
-                        <input type="text" name="image" id="edit_p_image" class="form-control">
+                        <label><i class="fas fa-image mr-1"></i> Partner Photo</label>
+                        <div class="custom-file mb-2">
+                            <input type="file" name="image_file" class="custom-file-input" id="edit_p_file" accept="image/*" onchange="previewPartnerImage(this, '#edit_img_preview', '#edit_p_file_label')">
+                            <label class="custom-file-label text-truncate" id="edit_p_file_label" for="edit_p_file">Browse new image from device...</label>
+                        </div>
+                        <div class="d-flex align-items-center p-2 rounded bg-light border">
+                            <img id="edit_img_preview" src="../assets/images/partner-1.jpg" alt="Preview" 
+                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #ffc107; margin-right: 12px; flex-shrink: 0;"
+                                 onerror="this.src='dist/img/admin.jpeg'">
+                            <div class="flex-grow-1">
+                                <small class="text-muted font-weight-bold d-block">Current / Asset Path:</small>
+                                <input type="text" name="image" id="edit_p_image" class="form-control form-control-sm" placeholder="assets/images/partner-1.jpg" oninput="$('#edit_img_preview').attr('src', '../' + this.value)">
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Browse a new image from device to replace, or keep the existing path.</small>
                     </div>
+
                     <div class="form-group">
                         <label>Display Order</label>
                         <input type="number" name="display_order" id="edit_p_order" class="form-control">
@@ -244,6 +334,28 @@ function editPartner(p) {
     $('#edit_p_image').val(p.image);
     $('#edit_p_order').val(p.display_order);
     $('#edit_p_status').prop('checked', parseInt(p.status) === 1);
+
+    // Reset file input & label
+    $('#edit_p_file').val('');
+    $('#edit_p_file_label').text('Browse new image from device...');
+
+    // Set preview image
+    var imgSrc = p.image ? ('../' + p.image) : 'dist/img/admin.jpeg';
+    $('#edit_img_preview').attr('src', imgSrc);
+
     $('#editPartnerModal').modal('show');
+}
+
+function previewPartnerImage(input, previewSelector, labelSelector) {
+    if (input.files && input.files[0]) {
+        var file = input.files[0];
+        $(labelSelector).text(file.name);
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $(previewSelector).attr('src', e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
 }
 </script>
