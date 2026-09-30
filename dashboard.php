@@ -1,6 +1,7 @@
 <?php
 require_once "includes/auth.php";
 require_once "assets/config/db.php";
+require_once "includes/settings_loader.php";
 
 $userId = (int) $_SESSION['user_id'];
 
@@ -126,8 +127,9 @@ foreach ($bookings as $b) {
             border-radius: 6px;
             font-weight: 300;
         }
-        .btn-logout-nav:hover{
-            color: #b91c1c; 
+
+        .btn-logout-nav:hover {
+            color: #b91c1c;
         }
 
         /* Dashboard Container */
@@ -315,34 +317,29 @@ foreach ($bookings as $b) {
 <body>
 
     <!-- Full Site Navigation Header -->
-    <!-- <header class="site-navbar">
-        <a href="index.php" class="brand">HR Auto Mobile <span>.</span></a>
-        <nav class="nav-links">
-            <a href="index.php">Home</a>
-            <a href="services.php">Services</a>
-            <a href="about.php">About Us</a>
-            <a href="contact.php">Contact</a>
-            <a href="dashboard.php" class="active">Dashboard</a>
-            <div class="user-nav-badge">
-                <i class='bx bx-user'></i> <?= htmlspecialchars($user['name']) ?>
-            </div>
-            <a href="logout.php" class="btn-logout-nav">Logout</a>
-        </nav>
-    </header> -->
-
     <header class="navbar">
-        <a href="/Hr_Auto_Mobile/index.php" class="logo">HR Auto Mobile <span>.</span></a>
+        <a href="/Hr_Auto_Mobile/index.php" class="logo">
+            <?= siteSetting('logo_text', 'HR Auto Mobile') ?>
+            <span>.</span>
+        </a>
         <div class="menu">
-            <a href="/Hr_Auto_Mobile/index.php">Home</a>
-            <a href="/Hr_Auto_Mobile/about.php">About</a>
-            <a href="/Hr_Auto_Mobile/services.php">Services</a>
-            <a href="/Hr_Auto_Mobile/contact.php">Contact</a>
+            <a href="/Hr_Auto_Mobile/index.php" class="nav-link">Home</a>
+            <a href="/Hr_Auto_Mobile/about.php" class="nav-link">About</a>
+            <a href="/Hr_Auto_Mobile/services.php" class="nav-link">Services</a>
+            <a href="/Hr_Auto_Mobile/contact.php" class="nav-link">Contact</a>
             <div class="user">
-                <a href="/Hr_Auto_Mobile/dashboard.php"><i class='bx bx-user'></i></a>
-                <a href="logout.php" class="btn-logout-nav">Logout</a>
+                <a href="/Hr_Auto_Mobile/dashboard.php" title="Customer Dashboard"><i class='bx bx-user'></i>
+                </a>
+                <a href="logout.php" class="btn-logout-nav" class="nav-link">Logout</a>
             </div>
         </div>
+        <div class="menu-icon">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
     </header>
+
 
     <main class="container">
         <!-- Customer Banner -->
@@ -452,13 +449,14 @@ foreach ($bookings as $b) {
     </main>
 
     <script>
-    // Force reload from server if restored from browser back-forward cache after logout
-    window.addEventListener('pageshow', function (event) {
-        if (event.persisted || (window.performance && (window.performance.navigation && window.performance.navigation.type === 2))) {
-            window.location.reload();
-        }
-    });
+        // Force reload from server if restored from browser back-forward cache after logout
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted || (window.performance && (window.performance.navigation && window.performance.navigation.type === 2))) {
+                window.location.reload();
+            }
+        });
     </script>
+    <script src="assets/js/script.js"></script>
 </body>
 
 </html>
